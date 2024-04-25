@@ -1,34 +1,38 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\",
+  "WorkspaceRootPath": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\SimWindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\ParticlePhysics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\SimWindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\ParticlePhysics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\HelperFunctions.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\HelperFunctions.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\Particle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\particle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\SimWindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\SimWindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\Timer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{26193A60-1389-400A-96ED-EDB81B06ED0A}|FluidSim2D\\FluidSim2D.vcxproj|solutionrelative:FluidSim2D\\Timer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,98 +42,114 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Timer.h",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.h",
-              "RelativeDocumentMoniker": "FluidSim2D\\Timer.h",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.h",
-              "RelativeToolTip": "FluidSim2D\\Timer.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "HelperFunctions.h",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\HelperFunctions.h",
+              "RelativeDocumentMoniker": "FluidSim2D\\HelperFunctions.h",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\HelperFunctions.h",
+              "RelativeToolTip": "FluidSim2D\\HelperFunctions.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-24T14:28:07.992Z",
+              "WhenOpened": "2024-04-25T11:57:53.277Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Timer.cpp",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.cpp",
-              "RelativeDocumentMoniker": "FluidSim2D\\Timer.cpp",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Timer.cpp",
-              "RelativeToolTip": "FluidSim2D\\Timer.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAdAAAA",
+              "DocumentIndex": 0,
+              "Title": "ParticlePhysics.cpp",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.cpp",
+              "RelativeDocumentMoniker": "FluidSim2D\\ParticlePhysics.cpp",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.cpp",
+              "RelativeToolTip": "FluidSim2D\\ParticlePhysics.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-24T14:28:47.763Z",
+              "WhenOpened": "2024-04-25T11:36:13.522Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
+              "Title": "ParticlePhysics.h",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.h",
+              "RelativeDocumentMoniker": "FluidSim2D\\ParticlePhysics.h",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\ParticlePhysics.h",
+              "RelativeToolTip": "FluidSim2D\\ParticlePhysics.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-25T11:29:09.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "particle.cpp",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp",
               "RelativeDocumentMoniker": "FluidSim2D\\particle.cpp",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\particle.cpp",
               "RelativeToolTip": "FluidSim2D\\particle.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAASAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-24T14:32:44.144Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Particle.h",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h",
               "RelativeDocumentMoniker": "FluidSim2D\\Particle.h",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\Particle.h",
               "RelativeToolTip": "FluidSim2D\\Particle.h",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAACIAAAACAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-24T12:32:23.627Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "SimWindow.h",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h",
               "RelativeDocumentMoniker": "FluidSim2D\\SimWindow.h",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.h",
               "RelativeToolTip": "FluidSim2D\\SimWindow.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAASAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAABJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-24T12:15:51.637Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "SimWindow.cpp",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp",
               "RelativeDocumentMoniker": "FluidSim2D\\SimWindow.cpp",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\SimWindow.cpp",
               "RelativeToolTip": "FluidSim2D\\SimWindow.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAEAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-24T12:15:39.228Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp",
+              "DocumentMoniker": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp",
               "RelativeDocumentMoniker": "FluidSim2D\\main.cpp",
-              "ToolTip": "C:\\Users\\ishan\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp",
+              "ToolTip": "C:\\Users\\c3002856\\source\\repos\\FluidSim2D\\FluidSim2D\\main.cpp",
               "RelativeToolTip": "FluidSim2D\\main.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-24T11:50:04.155Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-24T11:50:04.155Z"
             }
           ]
         }

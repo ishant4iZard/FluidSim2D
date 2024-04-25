@@ -27,12 +27,6 @@ private:
 	float dampingRate;
 	bool gravityEnabled;
 
-	//sph
-	float smoothingRadius;
-	float smoothingKernel(float inradius, float dst) {
-		float value = std::max(0.0f, inradius * inradius - dst * dst);
-		return pow(value, 3);
-	}
 
 public:
 	particle();

@@ -4,7 +4,7 @@
 particle::particle()
 {
     mass = 1.0f;
-    radius = 4.0f;
+    radius = 1.0f;
     position = sf::Vector2f();
     velocity = sf::Vector2f();
     acceleration = sf::Vector2f();
@@ -14,7 +14,7 @@ particle::particle()
     shape.setRadius(radius);
     shape.setFillColor(sf::Color::Blue);
     shape.setPosition(sf::Vector2f(position.x - radius, position.y - radius));
-    gravityEnabled = true;
+    gravityEnabled = false;
     dampingRate = 0.8f;
 }
 

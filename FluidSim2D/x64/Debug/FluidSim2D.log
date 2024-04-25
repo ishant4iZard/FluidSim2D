@@ -1,2 +1,11 @@
-﻿  SimWindow.cpp
-  FluidSim2D.vcxproj -> C:\Users\ishan\source\repos\FluidSim2D\x64\Debug\FluidSim2D.exe
+﻿  ParticlePhysics.cpp
+  SimWindow.cpp
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\SimWindow.cpp(8,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\SimWindow.cpp(8,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\SimWindow.cpp(29,39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\SimWindow.cpp(30,39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\SimWindow.cpp(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+C:\Users\c3002856\source\repos\FluidSim2D\FluidSim2D\main.cpp(9,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  FluidSim2D.vcxproj -> C:\Users\c3002856\source\repos\FluidSim2D\x64\Debug\FluidSim2D.exe

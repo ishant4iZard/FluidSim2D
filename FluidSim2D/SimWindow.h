@@ -3,6 +3,7 @@
 #include "SFML/Window.hpp"
 
 #include "Particle.h"
+#include "ParticlePhysics.h"
 #include "Timer.h"
 
 class SimWindow 
@@ -10,9 +11,7 @@ class SimWindow
 private:
 	sf::RenderWindow window;
 
-	particle* water;
-	float particleRadius;
-	float particleSpacing;
+	SPH* water;
 	int numParticles;
 
 	GameTimer timer;
@@ -25,10 +24,8 @@ private:
 	float realDT = idealDT;
 
 public:
-	SimWindow(int width, int height, const char* name,int numParticles =100);
+	SimWindow(int width, int height, const char* name,int numParticles =3025);
 	bool Update(double dt);
-
-	void ClearForces();
 
 	GameTimer getTimer() {
 		return timer;
