@@ -2,20 +2,64 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 
+struct boundingArea {
+	int left = 20;
+	int right = 1240;
+	int bottom = 700;
+	int top = 20;
+};
+
 class particle 
 {
 private:
+	float mass;
 	sf::CircleShape shape;
+	float radius;
+
+	sf::Vector2f position;
 	sf::Vector2f velocity;
 	sf::Vector2f acceleration;
 	sf::Vector2f force;
-	float mass;
+	sf::Vector2f gravity;
+
+	boundingArea fence;
+
+	float dampingRate;
+	bool gravityEnabled;
+
+	//sph
+	float smoothingRadius;
+	float smoothingKernel(float inradius, float dst) {
+		float value = std::max(0.0f, inradius * inradius - dst * dst);
+		return pow(value, 3);
+	}
 
 public:
 	particle();
 	
-	void update();
+	void Update(float dt);
+	sf::CircleShape drawable();
+
+	void setPosition(sf::Vector2f newPosition);
+	sf::Vector2f getPosition();
+
+	sf::Vector2f getVelocity();
 
 	void addForce(sf::Vector2f forceToBeAdded);
-	void draw();
+
+	void useGravity(bool is) {
+		gravityEnabled = is;
+	}
+
+	void ClearForces() {
+		force = sf::Vector2f();
+	}
+
+	float getRadius() {
+		return radius;
+	}
+	void setRadius(float newRadius) {
+		radius = newRadius;
+		shape.setRadius(radius);
+	}
 };
