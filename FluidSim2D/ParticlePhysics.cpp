@@ -4,17 +4,17 @@
 
 SPH::SPH(int inNumParticles, float screenWidth, float screeenHeight)
 {
-    particleRadius = 1.0f;
     numParticles = inNumParticles;
     water = new particle[numParticles];
-    particleSpacing = 0.7f;
-    smoothingRadius = 12.6f;
+    particleRadius = water[0].getRadius();
+    smoothingRadius = 10.0f;
+    particleSpacing = 1.0f;
     int particlesPerRow = (int)sqrt(numParticles);
     int particlesPerCol = (numParticles - 1) / particlesPerRow + 1;
     float spacing = particleRadius * 2 + particleSpacing;
     for (int i = 0; i < numParticles; i++) {
-        float x = (i % particlesPerRow - (particlesPerRow / 2.0f)) * spacing + screenWidth / 2;
-        float y = (i / particlesPerRow - (particlesPerCol / 2.0f)) * spacing + screeenHeight / 2;
+        float x = (i % particlesPerRow - (particlesPerRow / 2.0f) + 5.0f) * spacing + screenWidth / 2;
+        float y = (i / particlesPerRow - (particlesPerCol / 2.0f) + 5.0f) * spacing + screeenHeight / 2;
         water[i].setPosition(sf::Vector2f(x, y));
     }
 }
@@ -66,13 +66,14 @@ void SPH::PhysicsUpdate(float dt)
 }
 
 float vectorMagnitude(sf::Vector2f vector2) {
-    return sqrtf((vector2.x * vector2.x) + (vector2.y * vector2.y));
+    float r = sqrt((vector2.x * vector2.x) + (vector2.y * vector2.y));
+    return r;
 }
 
 float SPH::calcDensity(sf::Vector2f samplePosition)
 {
     float density = 0;
-    const float mass = 1;
+    const float mass = 1.0f;
 
     for (int i = 0; i < numParticles; i++) {
         float dst = vectorMagnitude(water[i].getPosition() - samplePosition);
@@ -81,6 +82,43 @@ float SPH::calcDensity(sf::Vector2f samplePosition)
     }
 
     return density;
+}
+
+
+float SPH::calcProperty(sf::Vector2f samplePosition)
+{
+    float property = 0;
+    const float mass = 1.0f;
+
+    for (int i = 0; i < numParticles; i++) {
+        float dst = vectorMagnitude(water[i].getPosition() - samplePosition);
+        float influence = smoothingKernel(smoothingRadius, dst);
+        float density = water[i].density;
+        property += water[i].particleProperty * mass * influence / density;
+    }
+
+    return property;
+}
+
+sf::Vector2f SPH::calcPropertyGradient(sf::Vector2f samplePosition)
+{
+    sf::Vector2f propertyGradient = sf::Vector2f(0,0);
+
+    for (int i = 0; i < numParticles; i++) {
+        float dst = vectorMagnitude(water[i].getPosition() - samplePosition);
+        sf::Vector2f dir = -(water[i].getPosition() - samplePosition) / dst;
+        float slope = smoothingKernerDerivative(smoothingRadius, dst);
+        float density = water[i].density;
+        propertyGradient += dir * water[i].particleProperty * slope / density;
+    }
+
+    return propertyGradient;
+}
+
+void SPH::UpdateDensity() {
+    for (int i = 0; i < numParticles; i++) {
+        water[i].density = calcDensity(water[i].getPosition());
+    }
 }
 
 void SPH::clearForces()

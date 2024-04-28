@@ -22,6 +22,7 @@ private:
 	sf::Vector2f force;
 	sf::Vector2f gravity;
 
+
 	boundingArea fence;
 
 	float dampingRate;
@@ -29,6 +30,9 @@ private:
 
 
 public:
+	float particleProperty;
+	float density;
+
 	particle();
 	
 	void Update(float dt);
