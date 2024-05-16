@@ -17,7 +17,9 @@ public:
     ThreadPool(size_t num_threads
         = thread::hardware_concurrency())
     {
-
+        if (num_threads > thread::hardware_concurrency()) {
+            num_threads = thread::hardware_concurrency();
+        }
         // Creating worker threads 
         for (size_t i = 0; i < num_threads; ++i) {
             threads_.emplace_back([this] {
