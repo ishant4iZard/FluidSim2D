@@ -2,12 +2,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 
-struct boundingArea {
-	int left = 20;
-	int right = 1240;
-	int bottom = 700;
-	int top = 20;
-};
+
 
 class particle 
 {
@@ -23,7 +18,7 @@ private:
 	sf::Vector2f gravity;
 
 
-	boundingArea fence;
+	//boundingArea fence;
 
 	float dampingRate;
 	bool gravityEnabled;

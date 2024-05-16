@@ -18,28 +18,28 @@ particle::particle()
     dampingRate = 0.8f;
 }
 
-void particle::Update(float dt)
-{
-    if (position.y >= fence.bottom - radius && velocity.y > 0) {
-        velocity.y = -velocity.y * dampingRate;
-    }
-    if (position.y <= fence.top + radius && velocity.y < 0) {
-        velocity.y = -velocity.y * dampingRate;
-    }
-    if (position.x >= fence.right - radius && velocity.x > 0) {
-        velocity.x = -velocity.x * dampingRate;
-    }
-    if (position.x <= fence.left + radius && velocity.y < 0) {
-        velocity.x = -velocity.x * dampingRate;
-    }
-
-    acceleration = force / mass;
-    if (gravityEnabled)
-        acceleration += gravity;
-    velocity += acceleration * dt;
-    setPosition(position + velocity * dt);
-    //std::cout << velocity.x << " " << velocity.y << "\n";
-}
+//void particle::Update(float dt)
+//{
+//    if (position.y >= fence.bottom - radius && velocity.y > 0) {
+//        velocity.y = -velocity.y * dampingRate;
+//    }
+//    if (position.y <= fence.top + radius && velocity.y < 0) {
+//        velocity.y = -velocity.y * dampingRate;
+//    }
+//    if (position.x >= fence.right - radius && velocity.x > 0) {
+//        velocity.x = -velocity.x * dampingRate;
+//    }
+//    if (position.x <= fence.left + radius && velocity.y < 0) {
+//        velocity.x = -velocity.x * dampingRate;
+//    }
+//
+//    acceleration = force / mass;
+//    if (gravityEnabled)
+//        acceleration += gravity;
+//    velocity += acceleration * dt;
+//    setPosition(position + velocity * dt);
+//    //std::cout << velocity.x << " " << velocity.y << "\n";
+//}
 
 void particle::addForce(sf::Vector2f forceToBeAdded)
 {

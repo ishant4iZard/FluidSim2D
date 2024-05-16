@@ -1,5 +1,31 @@
 ﻿  ParticlePhysics.cpp
-C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(16,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(54,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'ParticlePhysics.cpp')
   
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(55,31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'ParticlePhysics.cpp')
+  
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(60,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'ParticlePhysics.cpp')
+  
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,21): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,21): warning C4244:         with
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,21): warning C4244:         [
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,21): warning C4244:             T=float
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,21): warning C4244:         ]
+  (compiling source file 'ParticlePhysics.cpp')
+  
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,18): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,18): warning C4244:         with
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,18): warning C4244:         [
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,18): warning C4244:             T=float
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.h(79,18): warning C4244:         ]
+  (compiling source file 'ParticlePhysics.cpp')
+  
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(61,17): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(62,36): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(62,36): warning C4244:         with
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(62,36): warning C4244:         [
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(62,36): warning C4244:             T=float
+C:\Users\ishan\source\repos\FluidSim2D\FluidSim2D\ParticlePhysics.cpp(62,36): warning C4244:         ]
   FluidSim2D.vcxproj -> C:\Users\ishan\source\repos\FluidSim2D\x64\Debug\FluidSim2D.exe
