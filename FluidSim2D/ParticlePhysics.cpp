@@ -5,24 +5,37 @@
 SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
 {
     numParticles = inNumParticles;
-    Position    = new sf::Vector2f[numParticles];
+    /*Position    = new sf::Vector2f[numParticles];
     Velocity    = new sf::Vector2f[numParticles];
     Force       = new sf::Vector2f[numParticles];
     Acceleration= new sf::Vector2f[numParticles];
     PressureAcceleration = new sf::Vector2f[numParticles];
     density     = new float[numParticles];
-    pressure    = new float[numParticles];
+    pressure    = new float[numParticles];*/
+    particles = new particle[numParticles];
+
     particleRadius = 2.0f;
     shape.setRadius(particleRadius);
-    smoothingRadius = 50.0f;
-    particleSpacing = 1.0f;
+    smoothingRadius = 125.0f;
+    particleSpacing = 0.5f;
     threadpoolptr = new ThreadPool(3);
+
+    int HorGrids = screenWidth / smoothingRadius;
+    int VerGrids = screenHeight / smoothingRadius;
+
+    for (int i = 0; i < VerGrids; i++) {
+        std::vector<Grid*> GridRow;
+        for (int j = 0; j < HorGrids; j++) {
+            Grid* grid = new Grid;
+            GridRow.push_back(grid);
+        }
+        gridsys.push_back(GridRow);
+    }
 
     GridStart(screenWidth, screenHeight);
     //randomPositionStart(screenWidth, screenHeight);
 
-    UpdateDensity();
-    UpdatePressure();
+    UpdateDensityandPressure();
     UpdatePressureAcceleration();
 }
 
@@ -34,17 +47,18 @@ SPH::~SPH()
 }
 
 void::SPH::Update(float dt) {
+    
     PhysicsUpdate(dt);
 }
 
 void SPH::Draw(sf::RenderWindow& window)
 {
     for (int i = 0; i < numParticles; i++) {
-        shape.setPosition(Position[i]);
-        if (pressure[i] > 0) {
+        shape.setPosition(particles[i].Position);
+        if (particles[i].pressure > 0) {
             shape.setFillColor(sf::Color::Red);
         }
-        else if(pressure[i] < 0){
+        else if(particles[i].pressure < 0){
             shape.setFillColor(sf::Color::Blue);
         }
         else{
@@ -59,7 +73,7 @@ void SPH::randomPositionStart(float screenWidth, float screeenHeight)
     for (int i = 0; i < numParticles; i++) {
         int x = rand() % (int)screenWidth;
         float y = rand() % (int)screeenHeight;
-        Position[i] = sf::Vector2f(x, y);
+        particles[i].Position = sf::Vector2f(x, y);
     }
 }
 
@@ -71,7 +85,7 @@ void SPH::GridStart(float screenWidth, float screeenHeight)
     for (int i = 0; i < numParticles; i++) {
         float x = (i % particlesPerRow - (particlesPerRow / 2.0f) + 5.0f) * spacing + screenWidth / 2;
         float y = (i / particlesPerRow - (particlesPerCol / 2.0f) + 5.0f) * spacing + screeenHeight / 2;
-        Position[i] = sf::Vector2f(x, y);
+        particles[i].Position = sf::Vector2f(x, y);
     }
 }
 
@@ -81,8 +95,7 @@ void SPH::PhysicsUpdate(float dt)
 
     int iteratorCount = 0;
     while (dTOffset > realDT) {
-        threadpoolptr->enqueue([this]() {this->UpdateDensity(); });
-        threadpoolptr->enqueue([this]() {this->UpdatePressure(); });
+        threadpoolptr->enqueue([this]() {this->UpdateDensityandPressure(); });
         threadpoolptr->enqueue([this]() {this->UpdatePressureAcceleration(); });
         threadpoolptr->enqueue([this]() {this->updateParticle(realDT); });
 
@@ -118,39 +131,39 @@ void SPH::updateParticle(float dt)
 {
     for (int i = 0; i < numParticles; i++) {
 
-        Acceleration[i] = Force[i] / mass; 
-        Velocity[i] += PressureAcceleration[i] * dt;
+        particles[i].Acceleration= particles[i].Force/ mass;
+        particles[i].Velocity+= particles[i].PressureAcceleration * dt;
         if (gravityEnabled)
-            Acceleration[i] += gravity;
-        Velocity[i] += Acceleration[i] * dt;
-        Position[i] += Velocity[i] * dt;
-        if (Position[i].y >= fence.bottom - particleRadius && Velocity[i].y > 0) {
-            Position[i].y = fence.bottom;
-            Velocity[i].y = -Velocity[i].y * dampingRate;
+            particles[i].Acceleration += gravity;
+        particles[i].Velocity += particles[i].Acceleration * dt;
+        particles[i].Position += particles[i].Velocity * dt;
+        if (particles[i].Position.y >= fence.bottom - particleRadius && particles[i].Velocity.y > 0) {
+            particles[i].Position.y = fence.bottom;
+            particles[i].Velocity.y = -particles[i].Velocity.y * dampingRate;
         }
-        if (Position[i].y <= fence.top + particleRadius && Velocity[i].y < 0) {
-            Position[i].y = fence.top;
-            Velocity[i].y = -Velocity[i].y * dampingRate;
+        if (particles[i].Position.y <= fence.top + particleRadius && particles[i].Velocity.y < 0) {
+            particles[i].Position.y = fence.top;
+            particles[i].Velocity.y = -particles[i].Velocity.y * dampingRate;
         }
-        if (Position[i].x >= fence.right - particleRadius && Velocity[i].x > 0) {
-            Position[i].x = fence.right;
-            Velocity[i].x = -Velocity[i].x * dampingRate;
+        if (particles[i].Position.x >= fence.right - particleRadius && particles[i].Velocity.x > 0) {
+            particles[i].Position.x = fence.right;
+            particles[i].Velocity.x = -particles[i].Velocity.x * dampingRate;
         }
-        if (Position[i].x <= fence.left + particleRadius && Velocity[i].x < 0) {
-            Position[i].x = fence.left;
-            Velocity[i].x = -Velocity[i].x * dampingRate;
+        if (particles[i].Position.x <= fence.left + particleRadius && particles[i].Velocity.x < 0) {
+            particles[i].Position.x = fence.left;
+            particles[i].Velocity.x = -particles[i].Velocity.x * dampingRate;
         }
 
     }
 }
 
 
-float SPH::calcDensity(sf::Vector2f samplePosition)
+float SPH::calcDensity(int particleIndex)
 {
     float density = 0;
 
     for (int i = 0; i < numParticles; i++) {
-        float dst = vectorMagnitude(Position[i] - samplePosition);
+        float dst = vectorMagnitude(particles[i].Position - particles[particleIndex].Position);
         float influence = smoothingKernel(smoothingRadius, dst);
         density += mass * influence;
     }
@@ -165,37 +178,85 @@ sf::Vector2f SPH::calcPressureForce(int particleIndex)
     for (int i = 0; i < numParticles; i++) {
         if (particleIndex == i) continue;
 
-        sf::Vector2f offset(Position[i] - Position[particleIndex]);
+        sf::Vector2f offset(particles[i].Position - particles[particleIndex].Position);
 
         float dst = vectorMagnitude(offset);
+        if (dst > smoothingRadius) continue;
         sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offset) / dst;
         float m_slope = smoothingKernerDerivative(smoothingRadius, dst);
-        float m_density = density[i];
-        float sharedPressure = (pressure[i] + pressure[particleIndex]) / 2;
+        float m_density = particles[i].density;
+        float sharedPressure = (particles[i].pressure + particles[particleIndex].pressure)/2;
         pressureForce += dir * sharedPressure * m_slope * mass / m_density;
     }
 
     return pressureForce;
 }
 
-void SPH::UpdateDensity() {
-    avgDensity = 0;
-    for (int i = 0; i < numParticles; i++) {
-        density[i] = calcDensity(Position[i]);
-        avgDensity += density[i];
+float SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
+{
+    float density = 0;
+
+
+    for (int i = 0; i < gridsys[gridPos.x][gridPos.y]->gridParticles.size(); i++) {
+
     }
-    avgDensity /= numParticles;
+
+    if (gridPos.x > 0) {
+
+    }
+    return 0.0f;
+}
+
+sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
+{
+    return sf::Vector2f();
 }
 
 
-void SPH::UpdatePressure() {
+void SPH::UpdateDensityandPressure() {
     for (int i = 0; i < numParticles; i++) {
-        pressure[i] = ConvertDensityToPressure(density[i]);
+        particles[i].density = calcDensity(i);
+        particles[i].pressure = ConvertDensityToPressure(particles[i].density);
     }
 }
+
+
+
+
 void SPH::UpdatePressureAcceleration() {
     for (int i = 0; i < numParticles; i++) {
-        PressureAcceleration[i] = calcPressureForce(i) / density[i];
+        particles[i].PressureAcceleration = calcPressureForce(i) / particles[i].density;
+    }
+}
+
+
+
+void SPH::UpdateDensityandPressureGrid()
+{
+
+}
+
+void SPH::UpdatePressureAccelerationGrid()
+{
+}
+
+void SPH::SetParticlesInGrids()
+{
+    for (int i = 0; i < numParticles; i++) {
+        int gridX = particles[i].Position.x / smoothingRadius;
+        int gridY = particles[i].Position.y / smoothingRadius;
+
+        gridsys[gridX][gridY]->gridParticles.push_back(particles[i]);
+        particles[i].GridPos = sf::Vector2f(gridX, gridY);
+    }
+}
+
+void SPH::ClearGrids()
+{
+    for (int i = 0; i < gridsys.size(); i++) {
+        for (int j = 0; j < gridsys[i].size(); j++) {
+            gridsys[i][j]->gridParticles.clear();
+        }
     }
 }
 

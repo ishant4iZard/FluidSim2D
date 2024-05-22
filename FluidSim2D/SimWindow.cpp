@@ -25,11 +25,7 @@ bool SimWindow::Update(double dt)
             }
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Button::Left) {
-                float pX, pY;
-                pX = event.mouseButton.x;
-                pY = event.mouseButton.y;
-                float density = water->calcDensity(sf::Vector2f(pX, pY));
-                std::cout << density<<"\n";
+                
             }
         }
     }
