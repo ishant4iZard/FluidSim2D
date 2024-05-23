@@ -110,8 +110,11 @@ private:
 	void UpdateDensityandPressureGrid();
 	void UpdatePressureAccelerationGrid();
 	
+	//void CreateGrids();
 	void SetParticlesInGrids();
 	void ClearGrids();
+
+	std::vector<sf::Vector2f> findOffsetGrids(sf::Vector2f gridPos);
 
 	void clearForces();
 

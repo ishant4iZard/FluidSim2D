@@ -2,9 +2,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 
-struct Grid {
-	std::vector <particle> gridParticles;
-};
+#include <vector>
 
 class particle 
 {
@@ -25,4 +23,8 @@ public:
 
 	particle();
 	
+};
+
+struct Grid {
+	std::vector <int> gridParticles;
 };

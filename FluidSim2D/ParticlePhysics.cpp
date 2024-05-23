@@ -18,14 +18,14 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     shape.setRadius(particleRadius);
     smoothingRadius = 125.0f;
     particleSpacing = 0.5f;
-    threadpoolptr = new ThreadPool(3);
+    //threadpoolptr = new ThreadPool(4);
 
     int HorGrids = screenWidth / smoothingRadius;
     int VerGrids = screenHeight / smoothingRadius;
 
-    for (int i = 0; i < VerGrids; i++) {
+    for (int i = 0; i <= HorGrids; i++) {
         std::vector<Grid*> GridRow;
-        for (int j = 0; j < HorGrids; j++) {
+        for (int j = 0; j <= VerGrids; j++) {
             Grid* grid = new Grid;
             GridRow.push_back(grid);
         }
@@ -35,20 +35,28 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     GridStart(screenWidth, screenHeight);
     //randomPositionStart(screenWidth, screenHeight);
 
-    UpdateDensityandPressure();
-    UpdatePressureAcceleration();
+    //CreateGrids();
+
+    SetParticlesInGrids();
+    UpdateDensityandPressureGrid();
+    UpdatePressureAccelerationGrid();
+    ClearGrids();
 }
 
 
 
 SPH::~SPH()
 {
-    delete threadpoolptr;
+    //delete threadpoolptr;
 }
 
 void::SPH::Update(float dt) {
-    
-    PhysicsUpdate(dt);
+    SetParticlesInGrids();
+    UpdateDensityandPressureGrid();
+    UpdatePressureAccelerationGrid();
+    updateParticle(dt);
+    ClearGrids();
+    //PhysicsUpdate(dt);
 }
 
 void SPH::Draw(sf::RenderWindow& window)
@@ -95,9 +103,17 @@ void SPH::PhysicsUpdate(float dt)
 
     int iteratorCount = 0;
     while (dTOffset > realDT) {
-        threadpoolptr->enqueue([this]() {this->UpdateDensityandPressure(); });
-        threadpoolptr->enqueue([this]() {this->UpdatePressureAcceleration(); });
-        threadpoolptr->enqueue([this]() {this->updateParticle(realDT); });
+        /*threadpoolptr->enqueue([this]() {this->SetParticlesInGrids(); });
+        threadpoolptr->enqueue([this]() {this->UpdateDensityandPressureGrid(); });
+        threadpoolptr->enqueue([this]() {this->UpdatePressureAccelerationGrid(); });
+        threadpoolptr->enqueue([this]() {this->updateParticle(realDT); });*/
+        
+        
+        /*SetParticlesInGrids();
+        UpdateDensityandPressureGrid();
+        UpdatePressureAccelerationGrid();
+        updateParticle(realDT);
+        ClearGrids();*/
 
         //updateParticle(realDT);
 
@@ -195,21 +211,42 @@ sf::Vector2f SPH::calcPressureForce(int particleIndex)
 float SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
 {
     float density = 0;
+    
+    std::vector<sf::Vector2f> offsets = findOffsetGrids(gridPos);
 
-
-    for (int i = 0; i < gridsys[gridPos.x][gridPos.y]->gridParticles.size(); i++) {
-
+    for (auto offset : offsets) {
+        for (auto it : gridsys[gridPos.x + offset.x][gridPos.y + offset.y]->gridParticles) {
+            float dst = vectorMagnitude(particles[it].Position - particles[particleIndex].Position);
+            float influence = smoothingKernel(smoothingRadius, dst);
+            density += mass * influence;
+        }
     }
-
-    if (gridPos.x > 0) {
-
-    }
-    return 0.0f;
+    return density;
 }
 
 sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
 {
-    return sf::Vector2f();
+    sf::Vector2f pressureForce = sf::Vector2f(0, 0);
+    std::vector<sf::Vector2f> offsets = findOffsetGrids(gridPos);
+
+
+    for (auto offset : offsets) {
+        for (auto it : gridsys[gridPos.x + offset.x][gridPos.y + offset.y]->gridParticles) {
+            if (particleIndex == it) continue;
+
+            sf::Vector2f offset(particles[it].Position - particles[particleIndex].Position);
+
+            float dst = vectorMagnitude(offset);
+            if (dst > smoothingRadius) continue;
+            sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offset) / dst;
+            float m_slope = smoothingKernerDerivative(smoothingRadius, dst);
+            float m_density = particles[it].density;
+            float sharedPressure = (particles[it].pressure + particles[particleIndex].pressure) / 2;
+            pressureForce += dir * sharedPressure * m_slope * mass / m_density;
+        }
+    }
+
+    return pressureForce;
 }
 
 
@@ -233,12 +270,23 @@ void SPH::UpdatePressureAcceleration() {
 
 void SPH::UpdateDensityandPressureGrid()
 {
-
+    for (int i = 0; i < numParticles; i++) {
+        particles[i].density = calcDensityGrid(i, particles[i].GridPos);
+        particles[i].pressure = ConvertDensityToPressure(particles[i].density);
+    }
 }
 
 void SPH::UpdatePressureAccelerationGrid()
 {
+    for (int i = 0; i < numParticles; i++) {
+        particles[i].PressureAcceleration = calcPressureForceGrid(i, particles[i].GridPos) / particles[i].density;
+    }
 }
+
+//void SPH::CreateGrids()
+//{
+//
+//}
 
 void SPH::SetParticlesInGrids()
 {
@@ -246,7 +294,7 @@ void SPH::SetParticlesInGrids()
         int gridX = particles[i].Position.x / smoothingRadius;
         int gridY = particles[i].Position.y / smoothingRadius;
 
-        gridsys[gridX][gridY]->gridParticles.push_back(particles[i]);
+        gridsys[gridX][gridY]->gridParticles.push_back(i);
         particles[i].GridPos = sf::Vector2f(gridX, gridY);
     }
 }
@@ -258,5 +306,37 @@ void SPH::ClearGrids()
             gridsys[i][j]->gridParticles.clear();
         }
     }
+}
+
+std::vector<sf::Vector2f> SPH::findOffsetGrids(sf::Vector2f gridPos)
+{
+    std::vector<sf::Vector2f> offsets;
+
+    offsets.push_back(sf::Vector2f(0, 0));
+    if (gridPos.x > 0) {
+        offsets.push_back(sf::Vector2f(-1, 0));
+        if (gridPos.y > 0) {
+            offsets.push_back(sf::Vector2f(-1, -1));
+        }
+        if (gridPos.y < gridsys[0].size() - 1) {
+            offsets.push_back(sf::Vector2f(-1, 1));
+        }
+    }
+    if (gridPos.x < gridsys.size() - 1) {
+        offsets.push_back(sf::Vector2f(1, 0));
+        if (gridPos.y > 0) {
+            offsets.push_back(sf::Vector2f(1, -1));
+        }
+        if (gridPos.y < gridsys[0].size() - 1) {
+            offsets.push_back(sf::Vector2f(1, 1));
+        }
+    }
+    if (gridPos.y > 0) {
+        offsets.push_back(sf::Vector2f(0, -1));
+    }
+    if (gridPos.y < gridsys[0].size() - 1) {
+        offsets.push_back(sf::Vector2f(0, 1));
+    }
+    return offsets;
 }
 
