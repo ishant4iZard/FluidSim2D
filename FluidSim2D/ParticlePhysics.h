@@ -4,6 +4,9 @@
 #include "SFML/Graphics.hpp"
 #include "HelperFunctions.h"
 #include "ThreadPool.h"
+#include <mutex>
+
+#define PI 3.14159f
 
 struct boundingArea {
 	int left = 20;
@@ -27,20 +30,14 @@ private:
 
 	particle* particles;
 
-	/*sf::Vector2f* Position;
-	sf::Vector2f* Velocity;
-	sf::Vector2f* Force;
-	sf::Vector2f* Acceleration;
-	sf::Vector2f* PressureAcceleration;
-
-	float* density;
-	float* pressure;*/
-
 	float avgDensity;
 
-	float dampingRate = 0.9f;
+	float dampingRate = 0.98f;
 
 #pragma endregion
+
+	int HorGrids;
+	int VerGrids;
 
 	boundingArea fence;
 
@@ -48,20 +45,24 @@ private:
 	sf::Vector2f gravity = sf::Vector2f(0, 9.8f);
 
 	float targetDensity = 0.02f;
-	int pressureMultiplier = 1000;
+	int pressureMultiplier = 100;
 
-	std::vector<std::vector<Grid*>> gridsys;
+	std::vector<std::vector<std::unique_ptr<Grid>>> gridsys;
+
+	std::mutex** gridMutexes;
+
+	bool useOpenMp = 0;
 
 #pragma region HelperFunctions
 	float smoothingKernel(float inradius, float dst) {
 		if (dst >= inradius) return 0;
-		float volume = 3.141f * pow(inradius, 4) / 6;
+		float volume = PI * pow(inradius, 4) / 6;
 		return pow((inradius-dst),2)/ volume;
 	}
 
 	float smoothingKernerDerivative(float inradius, float dst) {
 		if (dst >= inradius)return 0;
-		float scale = 12 / (3.141f * pow(inradius, 4));
+		float scale = 12 / (PI * pow(inradius, 4));
 		return (dst- inradius) * scale;
 	}
 
@@ -104,8 +105,9 @@ private:
 
 	void PhysicsUpdate(float dt);
 	void updateParticle(float dt);
-	void UpdateDensityandPressure();
-	void UpdatePressureAcceleration();
+
+	//void UpdateDensityandPressure();
+	//void UpdatePressureAcceleration();
 	
 	void UpdateDensityandPressureGrid();
 	void UpdatePressureAccelerationGrid();
@@ -116,8 +118,6 @@ private:
 
 	std::vector<sf::Vector2f> findOffsetGrids(sf::Vector2f gridPos);
 
-	void clearForces();
-
 public:
 
 	SPH(int inNumParticles, float screenWidth, float screeenHeight);
@@ -126,14 +126,10 @@ public:
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
 	
-	float calcDensity(int particleIndex);
-	sf::Vector2f calcPressureForce(int particleIndex);
+	//float calcDensity(int particleIndex);
+	//sf::Vector2f calcPressureForce(int particleIndex);
 	
 	float calcDensityGrid(int particleIndex, sf::Vector2f gridPos);
 	sf::Vector2f calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos);
-
-	float calcProperty(sf::Vector2f samplePosition);
-	sf::Vector2f calcPropertyGradient(sf::Vector2f samplePosition);
-
 
 };

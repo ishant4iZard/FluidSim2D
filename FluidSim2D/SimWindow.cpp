@@ -1,11 +1,13 @@
 #include "SimWindow.h"
 #include <iostream>
 
+#include <chrono>
+
 SimWindow::SimWindow(int width, int height, const char* name, int innumParticles)
 {
 	window.create(sf::VideoMode(width, height), name);
     numParticles = innumParticles;
-    water = new SPH(3000,width,height);
+    water = new SPH(100000,width,height);
 }
 
 bool SimWindow::Update(double dt)
@@ -30,14 +32,41 @@ bool SimWindow::Update(double dt)
         }
     }
 
+    auto start_time
+        = std::chrono::high_resolution_clock::now();
     water->Update(dt);
     
+    auto physics_end_time
+        = std::chrono::high_resolution_clock::now();
+
+    auto taken_time_physics = std::chrono::duration_cast<
+        std::chrono::milliseconds>(
+            physics_end_time - start_time)
+        .count();
 
     window.clear();
     water->Draw(window);
     window.display();
 
+    auto render_end_time
+        = std::chrono::high_resolution_clock::now();
+
+    auto taken_time_render = std::chrono::duration_cast<
+        std::chrono::milliseconds>(
+            render_end_time - physics_end_time)
+        .count();
+
+
     timer.Tick();
+
+    std::cout << "\r"
+        << "phy execution time: " << taken_time_physics
+        << "ms "
+        << "ren execution time: " << taken_time_render
+        << "ms "
+        << "total time:"<< timer.GetTimeDeltaMSec()
+        << "ms ";
+    //std::cout << "\r" << 1.0f / timer.GetTimeDeltaSeconds();
 
 	return true;
 }
