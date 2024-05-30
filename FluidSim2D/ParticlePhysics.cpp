@@ -1,7 +1,6 @@
 #include "ParticlePhysics.h"
 #include <iostream>
 #include "SFML/Window.hpp"
-#include <execution>
 #include <algorithm>
 #include <omp.h>
 
@@ -19,6 +18,10 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     HorGrids = screenWidth / smoothingRadius;
     VerGrids = screenHeight / smoothingRadius;
 
+    hashLookupTable = new int [HorGrids * VerGrids];
+    resetHashLookupTable();
+
+
     for (int i = 0; i <= HorGrids; i++) {
         std::vector<std::unique_ptr<Grid>> GridRow;
         for (int j = 0; j <= VerGrids; j++) {
@@ -33,37 +36,44 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
         }
     }
 
-    gridMutexes = new std::mutex * [HorGrids + 1];
-    for (int i = 0; i <= HorGrids; ++i) {
-        gridMutexes[i] = new std::mutex[VerGrids + 1];
-    }
-
     GridStart(screenWidth, screenHeight);
     //randomPositionStart(screenWidth, screenHeight);
-
-    SetParticlesInGrids();
-    UpdateDensityandPressureGrid();
-    UpdatePressureAccelerationGrid();
-    ClearGrids();
+    
+    //if not using hashing
+    //gridMutexes = new std::mutex * [HorGrids + 1];
+    //for (int i = 0; i <= HorGrids; ++i) {
+    //    gridMutexes[i] = new std::mutex[VerGrids + 1];
+    //}
 }
 
 SPH::~SPH()
 {
-    for (int i = 0; i <= HorGrids; ++i) {
+    //if not using hashing
+    /*for (int i = 0; i <= HorGrids; ++i) {
         delete[] gridMutexes[i];
     }
-    delete[] gridMutexes;
+    delete[] gridMutexes;*/
 
     //delete threadpoolptr;
 }
 
 void::SPH::Update(float dt) {
-    SetParticlesInGrids();
+    //if not using hashing
+    /*SetParticlesInGrids();
     UpdateDensityandPressureGrid();
     UpdatePressureAccelerationGrid();
     updateParticle(dt);
-    ClearGrids();
+    ClearGrids();*/
+
     //PhysicsUpdate(dt);
+    
+    //with hashing
+    SetParticlesInGridsHashing();
+    UpdateDensityandPressureGrid();
+    UpdatePressureAccelerationGrid();
+    updateParticle(dt);
+    resetHashLookupTable();
+
 }
 
 void SPH::Draw(sf::RenderWindow& window)
@@ -237,54 +247,35 @@ void SPH::updateParticle(float dt)
         }
     }*/
 }
-
-//float SPH::calcDensity(int particleIndex)
-//{
-//    float density = 0;
-//
-//    for (int i = 0; i < numParticles; i++) {
-//        float dst = vectorMagnitude(particles[i].Position - particles[particleIndex].Position);
-//        float influence = smoothingKernel(smoothingRadius, dst);
-//        density += mass * influence;
-//    }
-//
-//    return density;
-//}
-//
-//sf::Vector2f SPH::calcPressureForce(int particleIndex)
-//{
-//    sf::Vector2f pressureForce = sf::Vector2f(0,0);
-//
-//    for (int i = 0; i < numParticles; i++) {
-//        if (particleIndex == i) continue;
-//
-//        sf::Vector2f offset(particles[i].Position - particles[particleIndex].Position);
-//
-//        float dst = vectorMagnitude(offset);
-//        if (dst > smoothingRadius) continue;
-//        sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offset) / dst;
-//        float m_slope = smoothingKernerDerivative(smoothingRadius, dst);
-//        float m_density = particles[i].density;
-//        float sharedPressure = (particles[i].pressure + particles[particleIndex].pressure)/2;
-//        pressureForce += dir * sharedPressure * m_slope * mass / m_density;
-//    }
-//
-//    return pressureForce;
-//}
-
+ 
 float SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
 {
     float density = 0;
     
     std::vector<sf::Vector2f> offsets = gridsys[gridPos.x][gridPos.y]->offsetGrids;
 
-    for (auto offset : offsets) {
+    //if not using hashing
+    /*for (auto offset : offsets) {
         for (auto it : gridsys[gridPos.x + offset.x][gridPos.y + offset.y]->gridParticles) {
             float dst = vectorMagnitude(particles[it].Position - particles[particleIndex].Position);
             float influence = smoothingKernel(smoothingRadius, dst);
             density += mass * influence;
         }
+    }*/
+
+    for (auto offset : offsets) {
+        int key = cellHash(gridPos.x + offset.x, gridPos.y + offset.y);
+        int startIndex = hashLookupTable[key];
+        for (int i = startIndex; i < numParticles; i++) {
+            if (key != particles[i].Gridhash) break;
+
+            float dst = vectorMagnitude(particles[i].Position - particles[particleIndex].Position);
+            float influence = smoothingKernel(smoothingRadius, dst);
+            density += mass * influence;
+
+        }
     }
+
     return density;
 }
 
@@ -293,7 +284,8 @@ sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
     sf::Vector2f pressureForce = sf::Vector2f(0, 0);
     std::vector<sf::Vector2f> offsets = gridsys[gridPos.x][gridPos.y]->offsetGrids;
 
-    for (auto offset : offsets) {
+    //if not using hashing
+    /*for (auto offset : offsets) {
         for (auto it : gridsys[gridPos.x + offset.x][gridPos.y + offset.y]->gridParticles) {
             if (particleIndex == it) continue;
 
@@ -307,23 +299,32 @@ sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
             float sharedPressure = (particles[it].pressure + particles[particleIndex].pressure) / 2;
             pressureForce += dir * sharedPressure * m_slope * mass / m_density;
         }
+    }*/
+
+    for (auto offset : offsets) {
+        int key = cellHash(gridPos.x + offset.x, gridPos.y + offset.y);
+        int startIndex = hashLookupTable[key];
+        for (int i = startIndex; i<numParticles;i++){
+            if (key != particles[i].Gridhash) break;
+            if (particleIndex == i) {
+                continue;
+            }
+
+            sf::Vector2f offsetvec(particles[i].Position - particles[particleIndex].Position);
+
+            float dst = vectorMagnitude(offsetvec);
+            if (dst > smoothingRadius) continue;
+            sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offsetvec) / dst;
+            float m_slope = smoothingKernerDerivative(smoothingRadius, dst);
+            float m_density = particles[i].density;
+            float sharedPressure = (particles[i].pressure + particles[particleIndex].pressure) / 2;
+            pressureForce += dir * sharedPressure * m_slope * mass / m_density;
+
+        }
     }
 
     return pressureForce;
 }
-
-//void SPH::UpdateDensityandPressure() {
-//    for (int i = 0; i < numParticles; i++) {
-//        particles[i].density = calcDensity(i);
-//        particles[i].pressure = ConvertDensityToPressure(particles[i].density);
-//    }
-//}
-//
-//void SPH::UpdatePressureAcceleration() {
-//    for (int i = 0; i < numParticles; i++) {
-//        particles[i].PressureAcceleration = calcPressureForce(i) / particles[i].density;
-//    }
-//}
 
 void SPH::UpdateDensityandPressureGrid()
 {
@@ -338,7 +339,7 @@ void SPH::UpdateDensityandPressureGrid()
     }
     else {
         auto calculateDensityAndPressure = [&](particle& p) {
-            p.density = calcDensityGrid(&p-particles, p.GridPos); // Assuming calcDensityGrid takes a particle object
+            p.density = calcDensityGrid(&p - particles, p.GridPos); // Assuming calcDensityGrid takes a particle object
             p.pressure = ConvertDensityToPressure(p.density);
             };
 
@@ -346,10 +347,6 @@ void SPH::UpdateDensityandPressureGrid()
             particles, particles + numParticles,
             calculateDensityAndPressure);
     }
-    /*for (int i = 0; i < numParticles; i++) {
-        particles[i].density = calcDensityGrid(i, particles[i].GridPos);
-        particles[i].pressure = ConvertDensityToPressure(particles[i].density);
-    }*/
 }
 
 void SPH::UpdatePressureAccelerationGrid()
@@ -373,27 +370,57 @@ void SPH::UpdatePressureAccelerationGrid()
             particles, particles + numParticles,
             calculatePressureAcceleration);
     }
-    /*for (int i = 0; i < numParticles; i++) {
-        particles[i].PressureAcceleration = calcPressureForceGrid(i, particles[i].GridPos) / particles[i].density;
-    }*/
 }
 
 void SPH::SetParticlesInGrids()
 {
-    if(useOpenMp)
+    //if not using hashing
+    //if(useOpenMp)
+    //{
+    //#pragma omp parallel for
+    //    for (int i = 0; i < numParticles; ++i) {
+    //        particle& p = particles[i];
+    //        int gridX = static_cast<int>(p.Position.x / smoothingRadius);
+    //        int gridY = static_cast<int>(p.Position.y / smoothingRadius);
+
+    //        // Lock the mutex for the grid cell being accessed
+    //        {
+    //            std::lock_guard<std::mutex> lock(gridMutexes[gridX][gridY]);
+    //            gridsys[gridX][gridY]->gridParticles.push_back(i);
+    //        }
+
+    //        p.GridPos = sf::Vector2f(gridX, gridY);
+    //    }
+    //}
+
+    //else
+    //{
+    //    std::for_each(std::execution::par_unseq,
+    //        particles, particles + numParticles,
+    //        [&](particle& p) {
+    //            int gridX = p.Position.x / smoothingRadius;
+    //            int gridY = p.Position.y / smoothingRadius;
+    //            {
+    //                // Lock the mutex for the grid cell being accessed
+    //                std::lock_guard<std::mutex> lock(gridMutexes[gridX][gridY]);
+    //                gridsys[gridX][gridY]->gridParticles.push_back(&p - particles);
+    //            }
+    //            p.GridPos = sf::Vector2f(gridX, gridY);
+    //        });
+    //}
+}
+
+void SPH::SetParticlesInGridsHashing()
+{
+    if (useOpenMp)
     {
-    #pragma omp parallel for
+#pragma omp parallel for
         for (int i = 0; i < numParticles; ++i) {
             particle& p = particles[i];
             int gridX = static_cast<int>(p.Position.x / smoothingRadius);
             int gridY = static_cast<int>(p.Position.y / smoothingRadius);
 
-            // Lock the mutex for the grid cell being accessed
-            {
-                std::lock_guard<std::mutex> lock(gridMutexes[gridX][gridY]);
-                gridsys[gridX][gridY]->gridParticles.push_back(i);
-            }
-
+            p.Gridhash = cellHash(gridX, gridY);
             p.GridPos = sf::Vector2f(gridX, gridY);
         }
     }
@@ -402,30 +429,33 @@ void SPH::SetParticlesInGrids()
     {
         std::for_each(std::execution::par_unseq,
             particles, particles + numParticles,
-            [&](particle& particle) {
-                int gridX = particle.Position.x / smoothingRadius;
-                int gridY = particle.Position.y / smoothingRadius;
-                {
-                    // Lock the mutex for the grid cell being accessed
-                    std::lock_guard<std::mutex> lock(gridMutexes[gridX][gridY]);
-                    gridsys[gridX][gridY]->gridParticles.push_back(&particle - particles);
-                }
-                particle.GridPos = sf::Vector2f(gridX, gridY);
+            [&](particle& p) {
+                int gridX = p.Position.x / smoothingRadius;
+                int gridY = p.Position.y / smoothingRadius;
+                p.Gridhash = cellHash(gridX, gridY);
+                p.GridPos = sf::Vector2f(gridX, gridY);
             });
     }
 
-    /*for (int i = 0; i < numParticles; i++) {
-        int gridX = particles[i].Position.x / smoothingRadius;
-        int gridY = particles[i].Position.y / smoothingRadius;
+    //sort particles according to hash
+    std::sort(std::execution::par, particles, particles + numParticles, [](const particle& a, const particle& b) {
+        return a.Gridhash < b.Gridhash;
+        });
 
-        gridsys[gridX][gridY]->gridParticles.push_back(i);
-        particles[i].GridPos = sf::Vector2f(gridX, gridY);
-    }*/
+    //create hash lookup for faster navigation
+    hashLookupTable[particles[0].Gridhash] = 0;
+    for (int i = 1; i < numParticles; i++) {
+        if (particles[i].Gridhash != particles[i - 1].Gridhash)
+        {
+            hashLookupTable[particles[i].Gridhash] = i;
+        }
+    }
 }
 
 void SPH::ClearGrids()
 {
-    if (useOpenMp) {
+    //if not using hash
+    /*if (useOpenMp) {
 #pragma omp parallel for
         for (int i = 0; i < gridsys.size(); ++i) {
             for (int j = 0; j < gridsys[i].size(); ++j) {
@@ -443,11 +473,6 @@ void SPH::ClearGrids()
             [&](std::vector<std::unique_ptr<Grid>>& row) {
                 std::for_each(row.begin(), row.end(), clearGridParticles);
             });
-    }
-    /*for (int i = 0; i < gridsys.size(); i++) {
-        for (int j = 0; j < gridsys[i].size(); j++) {
-            gridsys[i][j]->gridParticles.clear();
-        }
     }*/
 }
 

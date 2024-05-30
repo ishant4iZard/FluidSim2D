@@ -5,6 +5,8 @@
 #include "HelperFunctions.h"
 #include "ThreadPool.h"
 #include <mutex>
+#include <execution>
+
 
 #define PI 3.14159f
 
@@ -21,23 +23,21 @@ private:
 	//particle* water;
 
 #pragma region particles
-	sf::CircleShape shape;
+	particle* particles;
+
 	int numParticles;
+	sf::CircleShape shape;
 	float particleRadius;
 	float smoothingRadius;
 	float particleSpacing;
 	float mass = 1.0f;
-
-	particle* particles;
-
-	float avgDensity;
-
 	float dampingRate = 0.98f;
 
 #pragma endregion
 
 	int HorGrids;
 	int VerGrids;
+	int* hashLookupTable;
 
 	boundingArea fence;
 
@@ -49,7 +49,8 @@ private:
 
 	std::vector<std::vector<std::unique_ptr<Grid>>> gridsys;
 
-	std::mutex** gridMutexes;
+	//if not using hashing
+	//std::mutex** gridMutexes;
 
 	bool useOpenMp = 0;
 
@@ -85,6 +86,14 @@ private:
 		return a ;
 	}
 
+	int cellHash(int x, int y) {
+		return y * HorGrids + x;
+	}
+
+	void resetHashLookupTable() {
+		std::fill(std::execution::par, hashLookupTable, hashLookupTable + HorGrids*VerGrids, INT_MAX);
+	}
+
 #pragma endregion
 
 #pragma region PhysicsTimer
@@ -106,14 +115,14 @@ private:
 	void PhysicsUpdate(float dt);
 	void updateParticle(float dt);
 
-	//void UpdateDensityandPressure();
-	//void UpdatePressureAcceleration();
 	
 	void UpdateDensityandPressureGrid();
 	void UpdatePressureAccelerationGrid();
 	
-	//void CreateGrids();
 	void SetParticlesInGrids();
+
+	void SetParticlesInGridsHashing();
+
 	void ClearGrids();
 
 	std::vector<sf::Vector2f> findOffsetGrids(sf::Vector2f gridPos);
@@ -126,10 +135,6 @@ public:
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
 	
-	//float calcDensity(int particleIndex);
-	//sf::Vector2f calcPressureForce(int particleIndex);
-	
 	float calcDensityGrid(int particleIndex, sf::Vector2f gridPos);
 	sf::Vector2f calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos);
-
 };

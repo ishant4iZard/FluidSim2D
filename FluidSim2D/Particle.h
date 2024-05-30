@@ -21,6 +21,8 @@ public:
 
 	sf::Vector2f GridPos;
 
+	int Gridhash;
+
 	particle();
 	
 };
