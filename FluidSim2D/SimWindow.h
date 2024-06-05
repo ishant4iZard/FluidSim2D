@@ -25,6 +25,8 @@ private:
 
 public:
 	SimWindow(int width, int height, const char* name,int numParticles =3025);
+	~SimWindow();
+
 	bool Update(double dt);
 
 	GameTimer getTimer() {

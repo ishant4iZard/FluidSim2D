@@ -154,7 +154,6 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticlePhysics.h" />
     <ClInclude Include="SimWindow.h" />
-    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -10,6 +10,11 @@ SimWindow::SimWindow(int width, int height, const char* name, int innumParticles
     water = new SPH(100000,width,height);
 }
 
+SimWindow::~SimWindow()
+{
+    delete water;
+}
+
 bool SimWindow::Update(double dt)
 {
 	sf::Event event;

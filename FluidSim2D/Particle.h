@@ -11,6 +11,7 @@ public:
 	float radius;
 
 	sf::Vector2f Position;
+	sf::Vector2f PredictedPosition;
 	sf::Vector2f Velocity;
 	sf::Vector2f Force;
 	sf::Vector2f Acceleration;
