@@ -9,13 +9,13 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     numParticles = inNumParticles;
     particles = new particle[numParticles];
 
-    particleRadius = 0.25f;
+    particleRadius = 0.5f;
     shape.setRadius(particleRadius);
     smoothingRadius = 15.0f;
     particleSpacing = 0.5f;
 
-    SmoothingKernelMultiplier = 5 * (6 / (PI * pow(smoothingRadius, 4)));
-    SmoothingKernelDerivativeMultiplier = 5 * (12 / (PI * pow(smoothingRadius, 4)));
+    SmoothingKernelMultiplier = 5 * (6 / (PI * pow(smoothingRadius/100, 4)));
+    SmoothingKernelDerivativeMultiplier = 5 * (12 / (PI * pow(smoothingRadius/100, 4)));
 
     //poly6 = 315.f / (64 * PI * pow(smoothingRadius, 9));
 
@@ -88,7 +88,7 @@ void SPH::randomPositionStart(float screenWidth, float screeenHeight)
 
 void SPH::GridStart(float screenWidth, float screeenHeight)
 {
-    sf::Vector2f offsetVec(-300, 150);
+    sf::Vector2f offsetVec(-0,0);
     int particlesPerRow = (int)sqrt(numParticles);
     int particlesPerCol = (numParticles - 1) / particlesPerRow + 1;
     float spacing = particleRadius * 2 + particleSpacing;
@@ -157,6 +157,21 @@ void SPH::updateParticle(float dt)
                 p.Velocity.x = -p.Velocity.x * dampingRate;
             }
             p.PredictedPosition = p.Position + p.Velocity * (1/30.0f) + 0.5f * p.Acceleration * (1 / 30.0f) * (1 / 30.0f);
+            /*if (p.PredictedPosition.y >= fence.bottom - particleRadius && p.Velocity.y > 0) {
+                p.PredictedPosition.y = fence.bottom - (0.0001f + particleRadius);
+            }
+            if (p.PredictedPosition.y <= fence.top + particleRadius && p.Velocity.y < 0) {
+                p.PredictedPosition.y = fence.top + (0.0001f + particleRadius);
+            }
+            if (p.PredictedPosition.x >= fence.right - particleRadius && p.Velocity.x > 0) {
+                p.PredictedPosition.x = fence.right - (0.0001f + particleRadius);
+            }
+            if (p.PredictedPosition.x <= fence.left + particleRadius && p.Velocity.x < 0) {
+                p.PredictedPosition.x = fence.left + (0.0001f + particleRadius);
+            }*/
+
+            p.PredictedPosition.x = std::clamp(p.PredictedPosition.x, (float)fence.left, (float)fence.right);
+            p.PredictedPosition.y = std::clamp(p.PredictedPosition.y, (float)fence.top, (float)fence.bottom);
         };
 
         std::for_each(std::execution::par_unseq,
@@ -165,9 +180,9 @@ void SPH::updateParticle(float dt)
     }
 }
  
-float SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
+double SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
 {
-    float density = 0;
+    double density = 0;
     
     std::vector<sf::Vector2f> offsets = gridsys[gridPos.x][gridPos.y]->offsetGrids;
 
@@ -178,7 +193,7 @@ float SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
             if (key != particles[i].Gridhash) break;
 
             float dst = vectorMagnitude(particles[i].PredictedPosition - particles[particleIndex].PredictedPosition);
-            float influence = smoothingKernel(smoothingRadius, dst);
+            double influence = smoothingKernel(smoothingRadius, dst);
             density += mass * influence;
 
         }
@@ -205,14 +220,14 @@ sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
             float dst = vectorMagnitude(offsetvec);
             if (dst > smoothingRadius) continue;
             sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offsetvec) / dst;
-            float m_slope = smoothingKernerDerivative(smoothingRadius, dst);
-            float m_density = particles[i].density;
-            float sharedPressure = (particles[i].pressure + particles[particleIndex].pressure) / 2;
-            pressureForce += dir * sharedPressure * m_slope * mass / m_density;
+            double m_slope = smoothingKernerDerivative(smoothingRadius, dst);
+            double m_density = particles[i].density;
+            double sharedPressure = (particles[i].pressure + particles[particleIndex].pressure) / 2;
+            pressureForce += dir * (float)(sharedPressure * m_slope * mass / m_density);
 
             //add Viscoscity
             sf::Vector2f velocityDiff = particles[i].Velocity - particles[particleIndex].Velocity;
-            pressureForce += viscosityMultiplier * velocityDiff * -m_slope / m_density;
+            pressureForce += viscosityMultiplier * velocityDiff * (float)(-m_slope / (m_density * 100));
 
         }
     }

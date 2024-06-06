@@ -42,9 +42,9 @@ private:
 	bool gravityEnabled = 1;
 	sf::Vector2f gravity = sf::Vector2f(0, 9.80f);
 
-	float targetDensity = 0.95f;
-	float pressureMultiplier = 100.f;
-	float viscosityMultiplier = 0.05f;
+	double targetDensity = 2000.f;
+	float pressureMultiplier = 0.001f;
+	float viscosityMultiplier = 3.f;
 
 	std::vector<std::vector<std::unique_ptr<Grid>>> gridsys;
 
@@ -52,24 +52,24 @@ private:
 	bool useOpenMp = 0;
 
 #pragma region HelperFunctions
-	float SmoothingKernelMultiplier;
-	float SmoothingKernelDerivativeMultiplier;
+	double SmoothingKernelMultiplier;
+	double SmoothingKernelDerivativeMultiplier;
 
 	float poly6, spikyGrad, spikyLap;
 
-	float smoothingKernel(float inradius, float dst) {
+	double smoothingKernel(float inradius, float dst) {
 		if (dst >= inradius) return 0;
-		return pow((inradius-dst),2) * SmoothingKernelMultiplier;
+		return pow(((inradius - dst) / 100.0f), 2) * SmoothingKernelMultiplier;
 	}
 
-	float smoothingKernerDerivative(float inradius, float dst) {
+	double smoothingKernerDerivative(float inradius, float dst) {
 		if (dst >= inradius)return 0;
-		return (dst- inradius) * SmoothingKernelDerivativeMultiplier;
+		return ((dst- inradius) /100.0f) * SmoothingKernelDerivativeMultiplier;
 	}
 
-	float ConvertDensityToPressure(float density) {
-		float deltaDensity = density - targetDensity;
-		float m_pressure = deltaDensity * pressureMultiplier;
+	double ConvertDensityToPressure(double density) {
+		double deltaDensity = density - targetDensity;
+		double m_pressure = deltaDensity * pressureMultiplier;
 		return m_pressure;
 	}
 
@@ -128,6 +128,6 @@ public:
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
 	
-	float calcDensityGrid(int particleIndex, sf::Vector2f gridPos);
+	double calcDensityGrid(int particleIndex, sf::Vector2f gridPos);
 	sf::Vector2f calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos);
 };
