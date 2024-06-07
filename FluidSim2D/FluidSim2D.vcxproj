@@ -145,7 +145,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="particle.cpp" />
     <ClCompile Include="ParticlePhysics.cpp" />
     <ClCompile Include="SimWindow.cpp" />
     <ClCompile Include="Timer.cpp" />

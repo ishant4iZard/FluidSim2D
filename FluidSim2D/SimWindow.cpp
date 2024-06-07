@@ -3,11 +3,11 @@
 
 #include <chrono>
 
-SimWindow::SimWindow(int width, int height, const char* name, int innumParticles)
+SimWindow::SimWindow(int width, int height, const char* name)
 {
 	window.create(sf::VideoMode(width, height), name);
-    numParticles = innumParticles;
-    water = new SPH(50000,width,height);
+    numParticles = 50000;
+    water = new SPH(numParticles,width,height);
 }
 
 SimWindow::~SimWindow()

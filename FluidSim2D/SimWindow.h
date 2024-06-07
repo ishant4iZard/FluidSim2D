@@ -24,7 +24,7 @@ private:
 	float realDT = idealDT;
 
 public:
-	SimWindow(int width, int height, const char* name,int numParticles =3025);
+	SimWindow(int width, int height, const char* name);
 	~SimWindow();
 
 	bool Update(double dt);
