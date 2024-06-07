@@ -27,7 +27,3 @@ public:
 	particle();
 	
 };
-
-struct Grid {
-	std::vector<sf::Vector2f> offsetGrids;
-};
