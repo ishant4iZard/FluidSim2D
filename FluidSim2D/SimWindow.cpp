@@ -7,7 +7,7 @@ SimWindow::SimWindow(int width, int height, const char* name, int innumParticles
 {
 	window.create(sf::VideoMode(width, height), name);
     numParticles = innumParticles;
-    water = new SPH(100000,width,height);
+    water = new SPH(50000,width,height);
 }
 
 SimWindow::~SimWindow()

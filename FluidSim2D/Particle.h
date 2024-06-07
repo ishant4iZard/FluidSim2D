@@ -29,7 +29,5 @@ public:
 };
 
 struct Grid {
-	std::vector <int> gridParticles;
-
 	std::vector<sf::Vector2f> offsetGrids;
 };
