@@ -10,7 +10,7 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     particles = new particle[numParticles];
 
     particleRadius = 0.5f;
-    shape.setRadius(particleRadius);
+
     smoothingRadius = 15.0f;
     particleSpacing = 0.5f;
 
@@ -43,6 +43,8 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     GridStart(screenWidth, screenHeight);
     //randomPositionStart(screenWidth, screenHeight);
     
+    points = sf::VertexArray(sf::Points,numParticles);
+
 }
 
 SPH::~SPH()
@@ -62,19 +64,14 @@ void::SPH::Update(float dt) {
 
 void SPH::Draw(sf::RenderWindow& window)
 {
-    for (int i = 0; i < numParticles; i++) {
-        shape.setPosition(particles[i].Position);
-        if (particles[i].density > targetDensity+0.1f) {
-            shape.setFillColor(sf::Color::Red);
-        }
-        else if(particles[i].density < targetDensity-0.1f){
-            shape.setFillColor(sf::Color::Blue);
-        }
-        else{
-            shape.setFillColor(sf::Color::White);
-        }
-        window.draw(shape);
-    }
+    std::for_each(std::execution::par, particles, particles+numParticles , [this](const particle& p) {
+        std::size_t index = &p - particles;
+        points[index].position = p.Position;
+        points[index].color = sf::Color::Blue; // Set the color of the points to green
+        });
+
+    window.draw(points);
+
 }
 
 void SPH::randomPositionStart(float screenWidth, float screeenHeight)

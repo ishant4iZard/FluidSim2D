@@ -23,8 +23,7 @@ private:
 #pragma region particles
 	particle* particles;
 
-	int numParticles;
-	sf::CircleShape shape;
+	int numParticles; 
 	float particleRadius;
 	float smoothingRadius;
 	float particleSpacing;
@@ -48,6 +47,7 @@ private:
 
 	std::vector<std::vector<std::unique_ptr<Grid>>> gridsys;
 
+	sf::VertexArray points;
 
 	bool useOpenMp = 0;
 
