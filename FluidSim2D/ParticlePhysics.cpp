@@ -323,33 +323,31 @@ void SPH::SetParticlesInGridsHashing()
 std::vector<sf::Vector2f> SPH::findOffsetGrids(sf::Vector2f gridPos)
 {
     std::vector<sf::Vector2f> offsets;
-    offsets.reserve(9);
 
-    offsets.emplace_back(0, 0);
-
+    offsets.push_back(sf::Vector2f(0, 0));
     if (gridPos.x > 0) {
-        offsets.emplace_back(-1, 0);
+        offsets.push_back(sf::Vector2f(-1, 0));
         if (gridPos.y > 0) {
-            offsets.emplace_back(-1, -1);
+            offsets.push_back(sf::Vector2f(-1, -1));
         }
         if (gridPos.y < gridsys[0].size() - 1) {
-            offsets.emplace_back(-1, 1);
+            offsets.push_back(sf::Vector2f(-1, 1));
         }
     }
     if (gridPos.x < gridsys.size() - 1) {
-        offsets.emplace_back(1, 0);
+        offsets.push_back(sf::Vector2f(1, 0));
         if (gridPos.y > 0) {
-            offsets.emplace_back(1, -1);
+            offsets.push_back(sf::Vector2f(1, -1));
         }
         if (gridPos.y < gridsys[0].size() - 1) {
-            offsets.emplace_back(1, 1);
+            offsets.push_back(sf::Vector2f(1, 1));
         }
     }
     if (gridPos.y > 0) {
-        offsets.emplace_back(0, -1);
+        offsets.push_back(sf::Vector2f(0, -1));
     }
     if (gridPos.y < gridsys[0].size() - 1) {
-        offsets.emplace_back(0, 1);
+        offsets.push_back(sf::Vector2f(0, 1));
     }
     return offsets;
 }
