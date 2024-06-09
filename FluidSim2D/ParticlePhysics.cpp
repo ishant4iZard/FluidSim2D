@@ -59,7 +59,7 @@ void SPH::Draw(sf::RenderWindow& window)
 void SPH::randomPositionStart(float screenWidth, float screeenHeight)
 {
     for (int i = 0; i < numParticles; i++) {
-        int x = rand() % (int)screenWidth;
+        float x = rand() % (int)screenWidth;
         float y = rand() % (int)screeenHeight;
         particles[i].Position = sf::Vector2f(x, y);
     }
@@ -67,7 +67,7 @@ void SPH::randomPositionStart(float screenWidth, float screeenHeight)
 
 void SPH::GridStart(float screenWidth, float screeenHeight)
 {
-    sf::Vector2f offsetVec(-0,0);
+    sf::Vector2f offsetVec(0,0);
     int particlesPerRow = (int)sqrt(numParticles);
     int particlesPerCol = (numParticles - 1) / particlesPerRow + 1;
     float spacing = particleRadius * 2 + particleSpacing;
