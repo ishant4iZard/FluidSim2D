@@ -1,6 +1,6 @@
 # FluidSim2D
 
-FluidSim2D is a fluid simulation project using SFML for graphical rendering. This document provides instructions for setting up and building the project.
+FluidSim2D is a SPH based fluid simulation project using SFML for graphical rendering. This document provides instructions for setting up and building the project.
 
 ## Prerequisites
 
@@ -93,4 +93,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or contributions, please open an issue or contact [your email or GitHub profile].
+For questions or contributions, please open an issue or contact ishant0203@gmail.com.
