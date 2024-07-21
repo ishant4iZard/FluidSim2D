@@ -1,5 +1,53 @@
-/.vs
-*.ipch
-/FluidSim2D/x64
+# Ignore build directories
+.vs/
+build/
+bin/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+_deps/
+x64/
+lib/
+include/
+FluidSim2D.dir/
+
+# Ignore Visual Studio files
+*.sln
+*.vcxproj*
+*.vcxproj.*
+*.user
+*.filters
+
+# Ignore Windows specific files
+Thumbs.db
 *.exe
+*.dll
 *.pdb
+*.obj
+*.lib
+*.log
+*.exp
+*.idb
+*.ipch
+*.sdf
+*.cache
+*.ilk
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+*.bak
+*.pid
+*.seed
+
+# Ignore compiled object files and static libraries
+*.o
+*.a
+
+# Ignore SFML binary and dependency directories (if any)
+SFML-2.6.x/
+extlibs/
+
+
