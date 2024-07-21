@@ -1,7 +1,7 @@
 #pragma once
 #include "Particle.h"
-#include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Window.hpp"
 #include <execution>
 
 #define PI 3.14159f
@@ -42,33 +42,20 @@ private:
 	float pressureMultiplier = 0.001f;
 	float viscosityMultiplier = 3.f;
 
-	sf::Vector2f offsetsGrids[9] = { 
-		sf::Vector2f(0,0),
-		sf::Vector2f(1,0),
-		sf::Vector2f(1,1),
-		sf::Vector2f(0,1),
-		sf::Vector2f(-1,1),
-		sf::Vector2f(-1,0),
-		sf::Vector2f(-1,-1),
-		sf::Vector2f(0,-1),
-		sf::Vector2f(1,-1)
-
-	};
-
 	sf::VertexArray points;
 
 #pragma region HelperFunctionsAndConstants
 	double SmoothingKernelMultiplier;
 	double SmoothingKernelDerivativeMultiplier;
 
-	double smoothingKernel(float inradius, float dst) {
-		if (dst >= inradius) return 0;
-		return pow(((inradius - dst) / 100.0f), 2) * SmoothingKernelMultiplier;
+	double smoothingKernel(float dst) {
+		if (dst >= smoothingRadius) return 0;
+		return pow(((dst - smoothingRadius) / 100.0f), 2) * SmoothingKernelMultiplier;
 	}
 
-	double smoothingKernerDerivative(float inradius, float dst) {
-		if (dst >= inradius)return 0;
-		return ((dst- inradius) /100.0f) * SmoothingKernelDerivativeMultiplier;
+	double smoothingKernerDerivative(float dst) {
+		if (dst >= smoothingRadius)return 0;
+		return ((dst- smoothingRadius) /100.0f) * SmoothingKernelDerivativeMultiplier;
 	}
 
 	double ConvertDensityToPressure(double density) {

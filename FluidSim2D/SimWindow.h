@@ -15,14 +15,7 @@ private:
 	int numParticles;
 
 	GameTimer timer;
-
-	double dTOffset = 0;
-	const int   idealHZ = 240;
-	const float idealDT = 1.0f / idealHZ;
-
-	int realHZ = idealHZ;
-	float realDT = idealDT;
-
+	
 public:
 	SimWindow(int width, int height, const char* name);
 	~SimWindow();

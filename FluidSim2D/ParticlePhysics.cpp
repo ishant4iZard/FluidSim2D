@@ -1,7 +1,7 @@
 #include "ParticlePhysics.h"
-#include <iostream>
 #include "SFML/Window.hpp"
 #include <algorithm>
+#include <iostream>
 
 SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
 {
@@ -25,7 +25,7 @@ SPH::SPH(int inNumParticles, float screenWidth, float screenHeight)
     GridStart(screenWidth, screenHeight);
     //randomPositionStart(screenWidth, screenHeight);
     
-    points = sf::VertexArray(sf::Points,numParticles);
+    points = sf::VertexArray(sf::Points, numParticles);
 
 }
 
@@ -121,16 +121,17 @@ double SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
 {
     double density = 0;
 
-    for (auto offset : offsetsGrids) {
-        int key = cellHash(gridPos.x + offset.x, gridPos.y + offset.y);
-        int startIndex = hashLookupTable[key];
-        for (int i = startIndex; i < numParticles; i++) {
-            if (key != particles[i].Gridhash) break;
+    for (short Xoff = -1; Xoff < 2; Xoff++) {
+        for (short Yoff = -1; Yoff < 2; Yoff++) {
+            int key = cellHash(gridPos.x + Xoff, gridPos.y + Yoff);
+            int startIndex = hashLookupTable[key];
+            for (int i = startIndex; i < numParticles; i++) {
+                if (key != particles[i].Gridhash) break;
 
-            float dst = vectorMagnitude(particles[i].PredictedPosition - particles[particleIndex].PredictedPosition);
-            double influence = smoothingKernel(smoothingRadius, dst);
-            density += mass * influence;
-
+                float dst = vectorMagnitude(particles[i].PredictedPosition - particles[particleIndex].PredictedPosition);
+                double influence = smoothingKernel(dst);
+                density += mass * influence;
+            }
         }
     }
 
@@ -140,30 +141,30 @@ double SPH::calcDensityGrid(int particleIndex, sf::Vector2f gridPos)
 sf::Vector2f SPH::calcPressureForceGrid(int particleIndex, sf::Vector2f gridPos)
 {
     sf::Vector2f pressureForce = sf::Vector2f(0, 0);
-    //std::vector<sf::Vector2f> offsets = gridsys[gridPos.x][gridPos.y]->offsetGrids;
 
-    for (auto offset : offsetsGrids) {
-        int key = cellHash(gridPos.x + offset.x, gridPos.y + offset.y);
-        int startIndex = hashLookupTable[key];
-        for (int i = startIndex; i < numParticles; i++) {
-            if (key != particles[i].Gridhash) break;
+    for (short Xoff = -1; Xoff < 2; Xoff++) {
+        for (short Yoff = -1; Yoff < 2; Yoff++) {
+            int key = cellHash(gridPos.x + Xoff, gridPos.y + Yoff);
+            int startIndex = hashLookupTable[key];
+            for (int i = startIndex; i < numParticles; i++) {
+                if (key != particles[i].Gridhash) break;
 
-            if (particleIndex == i) continue;
+                if (particleIndex == i) continue;
 
-            sf::Vector2f offsetvec(particles[i].PredictedPosition - particles[particleIndex].PredictedPosition);
+                sf::Vector2f offsetvec(particles[i].PredictedPosition - particles[particleIndex].PredictedPosition);
 
-            float dst = vectorMagnitude(offsetvec);
-            if (dst > smoothingRadius) continue;
-            sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offsetvec) / dst;
-            double m_slope = smoothingKernerDerivative(smoothingRadius, dst);
-            double m_density = particles[i].density;
-            double sharedPressure = (particles[i].pressure + particles[particleIndex].pressure) / 2;
-            pressureForce += dir * (float)(sharedPressure * m_slope * mass / m_density);
+                float dst = vectorMagnitude(offsetvec);
+                if (dst > smoothingRadius) continue;
+                sf::Vector2f dir = dst == 0 ? GetRandomDir() : (offsetvec) / dst;
+                double m_slope = smoothingKernerDerivative(dst);
+                double m_density = particles[i].density;
+                double sharedPressure = (particles[i].pressure + particles[particleIndex].pressure) / 2;
+                pressureForce += dir * (float)(sharedPressure * m_slope * mass / m_density);
 
-            //add Viscoscity
-            sf::Vector2f velocityDiff = particles[i].Velocity - particles[particleIndex].Velocity;
-            pressureForce += viscosityMultiplier * velocityDiff * (float)(-m_slope / (m_density * 100));
-
+                //add Viscoscity
+                sf::Vector2f velocityDiff = particles[i].Velocity - particles[particleIndex].Velocity;
+                pressureForce += viscosityMultiplier * velocityDiff * (float)(-m_slope / (m_density * 100));
+            }
         }
     }
 
@@ -174,7 +175,7 @@ void SPH::UpdateDensityandPressureGrid()
 {
 
     auto calculateDensityAndPressure = [&](particle& p) {
-        p.density = calcDensityGrid(&p - particles, p.GridPos); // Assuming calcDensityGrid takes a particle object
+        p.density = calcDensityGrid(&p - particles, p.GridPos);
         p.pressure = ConvertDensityToPressure(p.density);
         };
 
