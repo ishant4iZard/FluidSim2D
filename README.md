@@ -61,7 +61,8 @@ Follow these steps to build the project:
     The built executable will be located in the `bin` directory. You can run it as follows:
 
     ```sh
-    ./bin/FluidSim2D
+    ./bin/Debug/FluidSim2D    # For Debug build
+    ./bin/Release/FluidSim2D  # For Release build
     ```
 
 ## Project Structure
